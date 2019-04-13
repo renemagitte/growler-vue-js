@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Growler</title>
+
+    <style>
+        .headers{
+            font-family: 'Verdana';
+            margin: 0
+        }
+
+        .accent-color{
+            color: pink; 
+        }
+
+        .contextMenuDiv {
+            width: 200px;
+            height: 60px;
+            background-color: lightcoral;
+        }
+
+        .contextMenu {
+            position: absolute;
+            background-color: lightgrey;
+        }
+    
+    </style>
+</head>
+<body>
+
+    <div id="growler">
+
+        <h3 v-text="appName" v-bind:style="{ color:isOnline? 'purple' : 'black' }"></h3> 
+
+        <!-- <form>
+            <input v-model="query" type="search"
+                placeholder="Search.."
+            > -->
+
+            <!-- Button onClick... (passing just event) -->
+            <!-- <button type="button"
+                v-on:click="executeSearch"> // shorthand version: @click
+                Search
+            </button> -->
+
+            <!-- ...and with several parameters.. (then event must be passed as reserved variable $event?) -->
+            <!-- <button type="button"
+                v-on:click="executeSearch('token', $event)">
+                Search
+            </button> -->
+
+            <!-- ...with stop. Stops propagation? Stop event from bubbling up?  ??????????? Read more about "event capture" etc. "Bubbling up, capture down" + self-modifier -->
+            <!-- <button type="submit"
+                v-on:click.stop="executeSubmitSearch"> // Stops propagation... bubbling etc ????????
+                Search
+            </button> -->
+
+        <!-- </form> -->
+
+
+        <!-- ...with prevent modifier -->
+        <!-- <form action="#" method="GET">
+            <input v-model="query" id="query" name="query">
+    
+            <button type="submit"
+                v-on:click.prevent="executeSubmitSearch">
+                Search
+            </button>
+        </form> -->
+
+
+        <!-- ...with once modifier -->
+        <!-- <form action="someUrl" method="POST">
+                <input type="search" 
+                v-model="query" 
+                v-bind:disabled="isRunning">
+        
+                <button type="button"
+                    v-on:click.once="executeOnceSearch"
+                    v-bind:disabled="isRunning"
+                >
+                    Search
+                </button>
+            </form> -->
+
+
+
+
+
+
+        <!-- Reacting with keyed events -->
+
+        <!-- Submit search on pressing enter. Evaluate key FIRST... -->
+        <!-- <form v-on:submit.prevent
+            action="..." method="GET">
+
+            <input type="search"
+                v-model="query"
+                v-on:keyup="evaluateKey"
+                v-on:keyup.enter="executeOnceSearch"/>
+
+            <button type="button"
+                v-on:click.once="executeOnceSearch">
+                Search
+            </button>
+        
+        </form> -->
+
+
+        <!-- Reacting with mouse button events -->
+        
+        <!-- ...right left or middle... -->
+        <!-- <div v-on:mousedown.left="onBlockClick">
+            Click in this area with the left mouse button...
+        </div> -->
+
+        <!-- ..cleaner... -->
+        <!-- <div v-on:click="onBlockClick">
+            Click in this area with the left mouse button...
+        </div> -->
+
+        <!-- ...Prevent default right click behavior... -->
+        <!-- <div class="contextMenuDiv"
+            v-on:contextmenu.prevent="onBlockClick">
+            Click in this area with the left mouse button...
+        </div>
+
+        <ul id="myContextMenu" class="contextMenu"
+            v-if="showContextMenu"
+            v-on:blur="closeContextMenu" // this doesn't work? why?
+            v-bind:style="{top:top, left:left}">
+            <li><a href="#"
+                v-on:click="onCopyClick">
+                Copy
+            </a></li>
+            <li><a href="#"
+                v-on:click="onPasteClick">
+                Paste
+            </a></li>
+        </ul> -->
+
+    </div>
+
+<script type="text/javascript" src="https://unpkg.com/vue"></script>
+
+<script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script type="text/javascript">
+
+    // Custom key codes can be defined like this and used instead of eg. enter: v-on:keyup.a="executeOnceSearch"
+    // Vue.config.keyCodes = {
+    //     a: 65
+    // }
+
+    var growler = new Vue({
+        el: '#growler',
+        data: {
+            // Headings with style bindings examples
+            appName: 'Growler',
+            isOnline: false,
+            // Input
+            query: '',
+            // Prevent default right click behavior:
+            showContextMenu: false,
+            top: '0px',
+            left: '0px'
+        },
+        methods: {
+            // executeSearch:function(event) {
+            //     // alert(this.query);  // THIS is automatically bind to the Vue instance
+            //     alert('Query: "' + this.query + '" Button:"' + event.target.innerText + '"');  // THIS is automatically bind to the Vue instance
+            // },
+
+            // executeSearch:function(t, e) {
+            //     var msg = 'Token: ' + t +
+            //         ' Query: ' + this.query + 
+            //         ' Button: ' +
+            //         event.target.innerText;
+            //     alert(msg);
+            // },
+            
+            // executeSubmitSearch:function() {
+            //     if (this.query) {
+            //         document.forms[0].submit();
+            //     } else {
+            //         alert('Please enter a query');
+            //     }
+            // },
+
+            executeOnceSearch:function() {
+                this.isRunning = true;
+                document.forms[0].submit();
+            },
+
+            // Custom right click behavior:
+            // onBlockClick: function(e) {
+            //     if(e.button === 2) {
+            //         this.showContextMenu = true;
+            //         this.top = e.y + 'px';
+            //         this.left = e.x + 'px';
+            //     }
+            // },
+            // closeContextMenu: function() {
+            //     this.showContextMenu = false;
+            // },
+            // onCopyClick: function() {
+            //     alert('Copy something');
+            //     this.closeContextMenu();
+            // },
+            // onPasteClick: function() {
+            //     alert('Paste something');
+            //     this.closeContextMenu();
+            // }
+
+        }
+
+
+    });
+
+
+
+</script>
+    
+</body>
+</html>
+
