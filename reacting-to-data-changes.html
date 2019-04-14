@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Growler</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <style>
+        /* [v-cloak] {
+            display: none;
+        } */
+    </style>
+</head>
+<body>
+
+    <div id="growler">
+
+        <h3 v-text="appName" v-bind:style="{ color:isOnline? 'purple' : 'black' }"></h3>                          
+       
+        <table>
+            <tr>
+                <th>Beer</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+
+            <tr v-for="beer in beers">
+                <td>{{ beer.name }}</td>
+                <td>{{ beer.price }}</td>
+                <td><button v-on:click="buy(beer)">Buy</button></td>
+            </tr>
+
+            <tr>
+                <td>Subtotal</td>
+                <td> {{ shoppingCart.subTotal }}</td>
+            </tr>
+        </table>
+
+    </div>
+
+<script type="text/javascript" src="https://unpkg.com/vue"></script>
+
+<script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script type="text/javascript">
+
+    var growler = new Vue({
+        el: '#growler',
+        data: {
+            appName: 'Growler',
+            isOnline: false,
+            beers: [
+                { name: 'Ahool Ale', price: 2.80 },
+                { name: 'Agogwe Ale', price: 2.38 },
+                { name: 'Aswang Ale', price: 3.05 },
+                { name: "Buru's Barley Wine", price: 2.95 },
+                { name: 'Hyote Chocolate Stout', price: 4.68 },
+                { name: 'Igopogo Pilsner', price: 3.40 },
+                { name: 'Jackalobe Lager', price: 2.49 },
+                { name: 'Mahamba Barley Wine', price: 4.89 },
+                { name: 'Megalodon Pale Ale', price: 3.76 },
+                { name: 'Pope Lick Porter', price: 3.52 },
+                { name: 'Chocolate Pukwudgie Stout', price: 4.17 },
+                { name: 'Sharlie Pilsner', price: 2.92 },
+                { name: 'Sigbin Stout', price: 2.49 },
+                { name: 'Snallygaster Pale Ale', price: 3.64 },
+                { name: 'Tikibalang Barley Wine', price: 4.21 },
+                { name: 'Pale Popobawa Ale', price: 4.34 },
+                { name: 'North Adjule Lager', price: 3.84 }
+            ],
+            // shoppingCart: [],
+            //subTotal: 0,
+            shoppingCart: {
+                items: [],
+                subTotal: 0.00
+            }
+        },
+
+        watch: {
+            // shoppingCart: function() {
+            //     this.updateSubTotal();
+            // },
+            //shoppingCart: 'updateSubTotal', // simplified version of the above, but can't hava parameters..?
+            
+            // When items and subTotal is nested in shoppingCart-object, use deep: true...?
+            shoppingCart: {
+                handler: function(latest, original) {
+                    this.updateSubTotal()
+                },
+                deep: true
+            } 
+        },
+        created: function() {
+            this.updateSubTotal();
+        },
+        methods: {
+            updateSubTotal: function() {
+                var length = this.shoppingCart.items.length;
+                var t = 0;
+                for (var i=0; i<length; i++) {
+                    t += this.shoppingCart.items[i].price;
+                }
+                this.shoppingCart.subTotal = t;
+            },
+            buy: function(beer) {
+                this.shoppingCart.items.push(beer);
+            }
+        }
+        
+
+
+
+    });
+
+
+
+</script>
+    
+</body>
+</html>
