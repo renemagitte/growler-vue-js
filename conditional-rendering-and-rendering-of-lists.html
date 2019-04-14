@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Growler</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    
+    </style>
+</head>
+<body>
+
+    <div id="growler">
+
+        <h3 v-text="appName" v-bind:style="{ color:isOnline? 'purple' : 'black' }"></h3> 
+
+        <!-- Rendering: If else... -->
+        <!-- <form style="width:100%;">
+            <div class="form-group">
+                <div class="input-group">
+                    <button v-on:click="executeSearch" type="button" class="btn btn-primary">Search</button>                            
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Query Results</label>
+                <p v-cloak>
+                    <div v-if="beers.length === 0">No beers were returned</div>
+                    <div v-else-if="beers.length === 1">1 beer was returned</div>
+                    <div v-else>{{ beers.length }} beers were returned</div>
+                </p>
+            </div>
+        </form> -->
+
+
+        <!-- Rendering: Show... -->
+        <!-- <form style="width:100%;">
+            <div class="form-group">
+                <div class="input-group">
+                    <button v-on:click="executeSearch" type="button" class="btn btn-primary">Search</button>                            
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Query Results</label>
+                <div v-show="beers.length === 0">
+                    No beers were returned
+                </div>
+
+                <div v-show="beers.length > 0">
+                    [beers will be rendered here]
+                </div>
+            </div>
+        </form> -->
+
+
+        <!-- Looping through data (including traversing object properties)... -->
+        <!-- "k" stands for key/property name -->
+        <!-- (when syntax is like "user in users" first index is 1, otherwise 0? -->
+        <!-- <ul>
+            <li v-for="(v, k, i) in user">
+                {{ i }}: {{ k }} - {{ v }}
+            </li>
+        </ul> -->
+
+        <!-- Iterating through array of objects... -->
+        <!-- <ul>
+            <li v-for="page in pages">
+                <a v-bind.href="page.url">
+                    {{ page.number }}
+                </a>
+            </li>
+        </ul> -->
+
+        <!-- ...or: -->
+        <!-- <ul>
+            <li v-for="(page, i) in pages">
+                <a v-bind:href="page.url">
+                    {{ page.number }}
+                </a>
+                <small>i: {{ i }}</small>
+
+            </li>
+        </ul> -->
+
+
+
+        <!-- Iterating through nested arrays -->
+        <!-- <div v-for="page in pages">
+            <b>Page: {{ page.number }}</b>
+            <div v-for="sec in page.sections">
+                {{ page.number }} - {{ sec }}</div>
+            </div>
+            <br/>
+        </div> -->
+
+
+
+        <!-- User v-for and if-for together! (for directive has higher precedence...) -->
+        <!-- <div>
+            <label><strong>Max Alcohol by volume (a.b.v.)</strong></label>
+            <input type="range" v-model="maxAbv" min="0" max="100" />
+            <small>{{ maxABv }}%</small>
+        </div>
+
+        <ul>
+            <li><strong>Beers</strong></li>
+            <li
+                v-for="beer in beers"
+                v-if="beer.abv < maxAbv">
+                {{ beer.name }} ({{ beer.abv }}%)
+            </li>
+        </ul> -->
+
+        <!-- Detecting array changes (sort and sort by number!) -->
+        <!-- <form style="width:100%;">
+            <div class="row">
+                <div class="col-2">
+                    <ul class="list-unstyled">
+                        <li><strong>Alcohol by Volumes (ABV)</strong></li>
+                        <li v-for="beer in abv">{{ beer }}</li>
+                    </ul>
+                </div>
+
+                <div class="col-1">
+                    <button type="button" class="btn btn-secondary" v-on:click="sortClick">Sort default</button>
+                </div>
+
+                <div class="col-2">
+                    <ul class="list-unstyled" v-if="sortedAbv.length > 0">
+                        <li><strong>Default Sort</strong></li>
+                        <li v-for="beer in sortedAbv">{{ beer }}</li>
+                    </ul>                            
+                </div>
+
+                <div class="col-1">
+                    <button type="button" class="btn btn-secondary" v-on:click="numericallySortClick" v-if="sortedAbv.length > 0">Sort number?</button>                            
+                </div>
+
+                <div class="col-2">
+                    <ul class="list-unstyled" v-if="numericallySortedAbv.length > 0">
+                        <li><strong>Numeric Sort</strong></li>
+                        <li v-for="beer in numericallySortedAbv">{{ beer }}</li>
+                    </ul>                                                        
+                </div>
+            </div>
+        </form> -->
+
+        <button type="button" class="btn btn-secondary" v-on:click="reAddBeersToArray">Re-add beers</button>                            
+
+       
+
+    </div>
+
+<script type="text/javascript" src="https://unpkg.com/vue"></script>
+
+<script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script type="text/javascript">
+
+    var growler = new Vue({
+        el: '#growler',
+        data: {
+            appName: 'Growler',
+            isOnline: false,
+            beers: [],
+
+            // Looping through data (object)
+            // user: {
+            //     firstName: 'Chad',
+            //     fingers: 10,
+            //     tags: ['male', 'scorpio'],
+            //     socialMedia: {
+            //         twitter: '@ecofic',
+            //         youtube: 'ecofic'
+            //     }
+            // }
+
+            //Iterating through array of objects
+            // pages: [
+            //     { number: 1, url: '?page=1' },
+            //     { number: 2, url: '?page=2' },
+            //     { number: 3, url: '?page=3' },
+            // ]
+
+
+            // Iterating through nested arrays:
+            // pages: [
+            //     { number: 1, url: '?page=1', 
+            //         sections: [ 'A', 'B', 'C']
+            //     },
+            //     { number: 2, url: '?page=2', 
+            //         sections: [ 'Y', 'Z' ]
+            //     },  
+            // ]
+
+            // User: v-for and if-for together!
+            // beers: [
+            //     {name: 'Tikibalang Barley Wine', abv: 9.6 },
+            //     {name: 'Hyote Chocolate Stout', abv: 7.4 },
+            //     {name: 'Pope Lick Porter', abv: 6.5 },
+            //     {name: 'Ahool Ale', abv: 5.4 },
+            //     {name: 'North Adjule Lager', abv: 3.7 },
+            // ],
+            // maxAbv: 7.0
+
+            abv: [
+                9.7,
+                12.5,
+                5.7,
+                11.1,
+                2.9
+            ],
+
+            // Detecting array changes (sort and sort by number!)
+            // sortedAbv: [],
+            // numericallySortedAbv: []
+
+
+            // Change array in middle:
+            // beersAgain: [ 'one beer', 'four beer' ],
+            // removedBeers: [ 'two beer', 'three beer' ]
+        },
+        methods: {
+            // executeSearch: function() {
+            //     var randomCount = Math.floor(Math.random() * 4);
+            //     this.beers = [];
+            //     for (var i=0; i<randomCount; i++) {
+            //         var beer = {
+            //             id: (i+1),
+            //             name: 'Beer #' + (i+1)
+            //         };
+            //         this.beers.push(beer);
+            //     }
+            // },
+
+
+            // Detecting array changes (sort and sort by number!)
+            // sortClick: function() {
+            //     this.sortedAbv = this.abv.slice();
+            //     this.sortedAbv.sort();                        
+            // },
+            // numericallySortClick: function() {
+            //     this.numericallySortedAbv = this.abv.slice();
+            //     this.numericallySortedAbv.sort(function(v1, v2) {
+            //         return v1 - v2;
+            //     });
+            // }
+
+
+            // Array methods: 
+            // this.arrayName.reverse(); - reverse direction
+            // var newBeer = 'Idas ipa; this.beers.push(newBeer); - add item LAST in array and return array
+            // this.beers.pop(); - remove LAST item in array and return that item
+            // var newBeer = 'Idas ipa; this.beers.unshift(newBeer); - add item FIRST in array and return array
+            // this.beers.shift(); - remove FIRST item in array and return that item
+            // this.beers.splice(1, 2) - removes 2 beers beginning from index 1 
+
+            // Updating an array item with Vue.set
+            // Vue.set(this.beers, 2, 'Ahool Pale Ale') - replaces index 2 in array with 'Ahool Pale Ale'
+
+
+            // Change array in middle:
+            // reAddBeersToArray: function() {
+            //     for (var i=0; i<this.removedBeers.length; i++) {
+            //         this.beersAgain.splice(1, 0, this.removedBeers[i]);
+            //     }
+            // }
+
+            
+
+
+        }
+
+
+    });
+
+
+
+</script>
+    
+</body>
+</html>
+
